@@ -10,8 +10,11 @@ export default class ContactList extends LightningElement {
     @track sortBy = 'Name';
     @track sortDirection = 'asc';
     @track searchKey = '';
-    @track totalContacts;
+    @track totalContacts = 0;
     @track loading = false;
+    @track totalPages;
+    @track totalPagesShown = 1;
+    @track pageNumberShown = 1;
 
     columns = [
         { label: 'Name', fieldName: 'nameUrl',  type: 'url', typeAttributes: { label: { fieldName: 'Name' }, target: '_blank' }, sortable: true},
@@ -45,17 +48,25 @@ export default class ContactList extends LightningElement {
     }
 
     @wire(getContactsCount, { searchKey: '$searchKey' })
-    wiredContactsCount({ error, data }) {        
+    wiredContactsCount({ error, data }) {                
         if (data) {
             this.totalContacts = data;
+            this.totalPages = Math.floor( this.totalContacts / 10);
+            this.totalPagesShown = Math.floor( this.totalContacts / 10)+1;
         } else if (error) {
             this.showToast('Error', `Error counting contacts: ${error.body.message}`, 'error');
+        } else {             
+            this.showToast('Warning', `No contacts found with the given input`, 'warning');
+            this.totalContacts = 0;
+            this.totalPages = 1;
+            this.totalPagesShown = 1;
         }
     }
 
     handleSearch(event) {
         this.searchKey = event.target.value;
         this.pageNumber = 0;
+        this.pageNumberShown = 1;
     }
 
     handleSort(event) {            
@@ -70,14 +81,28 @@ export default class ContactList extends LightningElement {
             this.sortBy = fieldName;  
             this.sortDirection = sortDirection;          
         }
+        this.pageNumber = 0;
+        this.pageNumberShown = 1;
     }
 
     handleNextPage() {
         this.pageNumber++;
+        this.pageNumberShown++;
     }
 
     handlePrevPage() {
         this.pageNumber--;
+        this.pageNumberShown--;
+    }
+
+    handleLastPage() {
+        this.pageNumber = this.totalPages ;
+        this.pageNumberShown = this.totalPages+1;
+    }
+
+    handleFirstPage() {
+        this.pageNumber = 0;
+        this.pageNumberShown = 1;
     }
 
     get isFirstPage() {
@@ -88,6 +113,16 @@ export default class ContactList extends LightningElement {
         return (this.pageNumber + 1) * this.pageSize >= this.totalContacts;
     }
 
+    handleFirst() {
+        this.pageNumber = 0;
+        this.pageNumberShown = 1;
+    }
+
+    get showBar() {
+        return this.totalPages > 1; 
+    } 
+    
+
     showToast(title, message, variant) {
         const event = new ShowToastEvent({
             title: title,
@@ -97,3 +132,6 @@ export default class ContactList extends LightningElement {
         this.dispatchEvent(event);
     }
 }
+
+
+
