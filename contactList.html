@@ -2,22 +2,29 @@
      <lightning-card title="Contacts List" icon-name="standard:contact">
         <div class="slds-p-around_medium">
             <div class="header-section">
-                <p class="contact-total"><b>Total Contacts:</b> {totalContacts}</p>
                 <div class="search-input">
                     <lightning-input label="Search" value={searchKey} onchange={handleSearch}></lightning-input>
                 </div>
             </div>
-            <lightning-datatable
-                key-field="id"
-                data={contacts}
-                columns={columns}
-                sorted-by={sortBy}
-                sorted-direction={sortDirection}
-                onsort={handleSort}
-                hide-checkbox-column="true">
-            </lightning-datatable>
-            <div class="footer-container">
-                <lightning-button-group>
+            <template if:true={hasContacts}>
+                <lightning-datatable
+                    key-field="id"
+                    data={contacts}
+                    columns={columns}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={handleSort}
+                    hide-checkbox-column="true">
+                </lightning-datatable>
+            </template>            
+            <template if:false={hasContacts}>
+                <div class="no-records-message">
+                    <p>No records found with that input </p>
+                </div>
+            </template>            
+            <div class="footer-container">                
+                <p class="contact-total"><b>Total Contacts:</b> {totalContacts}</p>
+                <lightning-button-group>                    
                     <lightning-button label="First" onclick={handleFirstPage} disabled={isFirstPage}></lightning-button>
                     <lightning-button label="Previous" onclick={handlePrevPage} disabled={isFirstPage}></lightning-button>
                     <div class="pagination-container">
@@ -37,5 +44,3 @@
         </template>
     </lightning-card>
 </template>
-
-
