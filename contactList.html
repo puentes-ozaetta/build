@@ -1,7 +1,12 @@
 <template>
-    <lightning-card title="Contacts List" icon-name="standard:contact">
+     <lightning-card title="Contacts List" icon-name="standard:contact">
         <div class="slds-p-around_medium">
-            <lightning-input label="Search" value={searchKey} onchange={handleSearch}></lightning-input>
+            <div class="header-section">
+                <p class="contact-total"><b>Total Contacts:</b> {totalContacts}</p>
+                <div class="search-input">
+                    <lightning-input label="Search" value={searchKey} onchange={handleSearch}></lightning-input>
+                </div>
+            </div>
             <lightning-datatable
                 key-field="id"
                 data={contacts}
@@ -11,16 +16,26 @@
                 onsort={handleSort}
                 hide-checkbox-column="true">
             </lightning-datatable>
-            <lightning-button-group>
-                <lightning-button label="Previous" onclick={handlePrevPage} disabled={isFirstPage}></lightning-button>
-                <lightning-button label="Next" onclick={handleNextPage} disabled={isLastPage}></lightning-button>
-            </lightning-button-group>
-        </div>
+            <div class="footer-container">
+                <lightning-button-group>
+                    <lightning-button label="First" onclick={handleFirstPage} disabled={isFirstPage}></lightning-button>
+                    <lightning-button label="Previous" onclick={handlePrevPage} disabled={isFirstPage}></lightning-button>
+                    <div class="pagination-container">
+                        <div class="page-number-box">
+                            <span class="page-number">{pageNumberShown}</span>
+                            <span class="separator">/</span>
+                            <span class="total-pages">{totalPagesShown}</span>
+                        </div>
+                    </div>           
+                    <lightning-button label="Next" onclick={handleNextPage} disabled={isLastPage}></lightning-button>
+                    <lightning-button label="Last" onclick={handleLastPage} disabled={isLastPage}></lightning-button>
+                </lightning-button-group>
+            </div>
+        </div>        
         <template if:true={loading}>
             <lightning-spinner alternative-text="Loading"></lightning-spinner>
         </template>
-        <!--<template if:true={error}>
-            <p class="slds-text-color_error">{error}</p>
-        </template>-->
     </lightning-card>
 </template>
+
+
