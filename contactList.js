@@ -15,6 +15,7 @@ export default class ContactList extends LightningElement {
     @track totalPages;
     @track totalPagesShown = 1;
     @track pageNumberShown = 1;
+    @track hasContacts = true;
 
     columns = [
         { label: 'Name', fieldName: 'nameUrl',  type: 'url', typeAttributes: { label: { fieldName: 'Name' }, target: '_blank' }, sortable: true},
@@ -48,15 +49,16 @@ export default class ContactList extends LightningElement {
     }
 
     @wire(getContactsCount, { searchKey: '$searchKey' })
-    wiredContactsCount({ error, data }) {                
+    wiredContactsCount({ error, data }) {            
         if (data) {
             this.totalContacts = data;
             this.totalPages = Math.floor( this.totalContacts / 10);
             this.totalPagesShown = Math.floor( this.totalContacts / 10)+1;
+            this.hasContacts = true;
         } else if (error) {
             this.showToast('Error', `Error counting contacts: ${error.body.message}`, 'error');
         } else {             
-            this.showToast('Warning', `No contacts found with the given input`, 'warning');
+            this.hasContacts = false;
             this.totalContacts = 0;
             this.totalPages = 1;
             this.totalPagesShown = 1;
