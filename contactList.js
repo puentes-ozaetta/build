@@ -134,6 +134,3 @@ export default class ContactList extends LightningElement {
         this.dispatchEvent(event);
     }
 }
-
-
-
