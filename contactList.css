@@ -1,9 +1,9 @@
 .footer-container {
     display: flex;
-    justify-content: flex-end; /* Aligns content to the right */
-    align-items: center; /* Aligns items vertically */
+    justify-content: space-between;
+    align-items: center; 
     padding: 1rem;
-    gap: 1rem; /* Space between items */
+    gap: 1rem; 
 }
 
 .pagination-container {
@@ -71,10 +71,36 @@
 
 .contact-total {
     margin: 0; 
+    align-items: left;
 }
 
 .search-input {
     display: flex;
     align-items: center;
+}
+
+.no-records-message {
+    background-color: #f4f6f9; 
+    border: 1px solid #d0d6de; 
+    padding: 2rem; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
+    font-size: 1.5rem; 
+    font-weight: 500; 
+    color: #4a4a4a; 
+    margin-top: 2rem; 
+    margin-bottom: 2rem;
+}
+
+.no-records-message p {
+    margin: 0; 
+}
+
+.no-records-message::before {
+    content: '⚠️'; 
+    font-size: 2rem; 
+    display: block;
+    margin-bottom: 1rem; 
 }
 
