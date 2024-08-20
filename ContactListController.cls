@@ -1,15 +1,15 @@
 public with sharing class ContactListController {
 
     @AuraEnabled(cacheable=true)
-    public static List<Contact> getContacts(Integer pageSize, Integer pageNumber, String sortBy, String sortDirection, String searchKey) {
+    public static List<Contact> getContacts( Integer pageSize , Integer pageNumber , String sortBy , String sortDirection , String searchKey ) {
         String query = 'SELECT Id, Name, Email, Phone FROM Contact ';
         if ( !string.isBlank( searchKey ) ) {
             query += ' WHERE Name LIKE \'%' + searchKey + '%\' ';
         }
         query += 'ORDER BY ' + sortBy + ' ' + sortDirection + ' LIMIT ' + pageSize + ' OFFSET ' + string.valueOf( pageSize*pageNumber );   
         try {
-            return Database.query(query);
-        } catch (Exception error) {
+            return Database.query( query );
+        } catch ( Exception error ) {
             throw new AuraHandledException('Error fetching contacts: ' + error.getMessage());
         }
     }
@@ -22,7 +22,7 @@ public with sharing class ContactListController {
         }
         try {
             return Database.countQuery( query );
-        } catch (Exception error) {
+        } catch ( Exception error ) {
             throw new AuraHandledException( error.getMessage() );
         }
     }
